@@ -34,11 +34,7 @@ const NO_SHELL_INTEGRATION_FALLBACK_TIMEOUT_MS = 5_000
  *
  * This avoids importing p-timeout and works with VS Code's AsyncIterable.
  */
-async function* withTimeout<T>(
-	iterable: AsyncIterable<T>,
-	ms: number,
-	signal?: AbortSignal,
-): AsyncIterable<T> {
+async function* withTimeout<T>(iterable: AsyncIterable<T>, ms: number, signal?: AbortSignal): AsyncIterable<T> {
 	const iterator = iterable[Symbol.asyncIterator]()
 	try {
 		while (true) {
@@ -49,10 +45,14 @@ async function* withTimeout<T>(
 						reject(new Error(`Stream timed out after ${ms}ms`))
 					}, ms)
 					if (signal) {
-						signal.addEventListener("abort", () => {
-							clearTimeout(timer)
-							reject(new Error("Stream aborted"))
-						}, { once: true })
+						signal.addEventListener(
+							"abort",
+							() => {
+								clearTimeout(timer)
+								reject(new Error("Stream aborted"))
+							},
+							{ once: true },
+						)
 					}
 				}),
 			])
@@ -292,7 +292,9 @@ export class VscodeTerminalProcess extends EventEmitter<TerminalProcessEvents> i
 				// Log the error, use terminal capture fallback, and emit continue
 				// so the agent loop can proceed instead of hanging forever.
 				const errorMsg = error instanceof Error ? error.message : String(error)
-				Logger.warn(`[VscodeTerminalProcess] Shell integration stream error/ timeout: ${errorMsg}. Falling back to terminal capture.`)
+				Logger.warn(
+					`[VscodeTerminalProcess] Shell integration stream error/ timeout: ${errorMsg}. Falling back to terminal capture.`,
+				)
 				telemetryService.captureTerminalOutputFailure(TerminalOutputFailureReason.TIMEOUT, "vscode")
 				await returnCurrentTerminalContents()
 				finishProcess()

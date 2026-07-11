@@ -44,6 +44,15 @@ eslint-rules/**
 .husky/**
 .env
 
+# Root monorepo files — not part of the VSIX
+../vitest.config.ts
+../package.json
+../bun.lock
+../biome.json
+../.tool-versions
+../.nvmrc
+../*.md
+
 # sdk (separate monorepo with its own build/release pipeline)
 sdk/**
 
