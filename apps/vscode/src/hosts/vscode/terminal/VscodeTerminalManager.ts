@@ -107,6 +107,11 @@ export class VscodeTerminalManager implements ITerminalManager {
 	private terminalReuseEnabled = true
 	private terminalOutputLineLimit = 500
 	private defaultTerminalProfile = "default"
+	// ===== Fix 3: Terminal reuse race condition guard =====
+	// Prevents two concurrent getOrCreateTerminal() calls from both returning
+	// the same terminal. The acquisition map tracks which terminal IDs are
+	// currently being claimed; if two callers race, only one wins.
+	private terminalAcquisitionInProgress: Set<number> = new Set()
 
 	/**
 	 * Resolve a terminal's stored shellPath to an effective path.
@@ -308,9 +313,16 @@ export class VscodeTerminalManager implements ITerminalManager {
 		Logger.log(`[TerminalManager] Looking for terminal in cwd: ${cwd}`)
 		Logger.log(`[TerminalManager] Available terminals: ${terminals.length}`)
 
+		// ===== Fix 3: Atomically check busy + acquisition guard =====
+		// We must also check terminalAcquisitionInProgress to prevent two concurrent
+		// getOrCreateTerminal() calls from both picking the same "non-busy" terminal.
 		const matchingTerminal = terminals.find((t) => {
 			if (t.busy) {
 				Logger.log(`[TerminalManager] Terminal ${t.id} is busy, skipping`)
+				return false
+			}
+			if (this.terminalAcquisitionInProgress.has(t.id)) {
+				Logger.log(`[TerminalManager] Terminal ${t.id} is being acquired by another caller, skipping`)
 				return false
 			}
 			// Check if effective shell path matches current configuration
@@ -328,7 +340,9 @@ export class VscodeTerminalManager implements ITerminalManager {
 		})
 		if (matchingTerminal) {
 			Logger.log(`[TerminalManager] Found matching terminal ${matchingTerminal.id} in correct cwd`)
+			this.terminalAcquisitionInProgress.add(matchingTerminal.id)
 			this.terminalIds.add(matchingTerminal.id)
+			this.terminalAcquisitionInProgress.delete(matchingTerminal.id)
 			// Cast to ITerminalInfo for interface compatibility
 			return matchingTerminal as unknown as ITerminalInfo
 		}
@@ -336,10 +350,16 @@ export class VscodeTerminalManager implements ITerminalManager {
 		// If no non-busy terminal in the current working dir exists and terminal reuse is enabled, try to find any non-busy terminal regardless of CWD
 		if (this.terminalReuseEnabled) {
 			const availableTerminal = terminals.find(
-				(t) => !t.busy && VscodeTerminalManager.effectiveShellPath(t.shellPath) === effectiveExpected,
+				(t) =>
+					!t.busy &&
+					!this.terminalAcquisitionInProgress.has(t.id) &&
+					VscodeTerminalManager.effectiveShellPath(t.shellPath) === effectiveExpected,
 			)
 			if (availableTerminal) {
-				availableTerminal.busy = true
+				// ===== Fix 3: Mark acquisition in progress =====
+				// This prevents another concurrent caller from also picking this terminal
+				// before we set busy=true in runCommand().
+				this.terminalAcquisitionInProgress.add(availableTerminal.id)
 
 				// Set up promise and tracking for CWD change
 				const cwdPromise = new Promise<void>((resolve, reject) => {
@@ -366,7 +386,9 @@ export class VscodeTerminalManager implements ITerminalManager {
 				} finally {
 					availableTerminal.pendingCwdChange = undefined
 					availableTerminal.cwdResolved = undefined
-					availableTerminal.busy = false
+					// Don't set busy=false here; runCommand() will set busy=true.
+					// But we MUST release the acquisition guard so future calls can find this terminal.
+					this.terminalAcquisitionInProgress.delete(availableTerminal.id)
 				}
 				this.terminalIds.add(availableTerminal.id)
 				// Cast to ITerminalInfo for interface compatibility

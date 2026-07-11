@@ -7,6 +7,11 @@ import { buildToolApprovalAskMessage } from "./message-translator"
 import type { SdkMessageCoordinator } from "./sdk-message-coordinator"
 import { DEFAULT_TOOL_APPROVAL_DENIAL_REASON } from "./tool-approval-denial"
 
+// ===== Fix 2: Approval timeout =====
+// If the user doesn't respond to a tool approval or ask question within this time,
+// auto-deny/auto-continue to prevent the agent loop from hanging forever.
+const APPROVAL_TIMEOUT_MS = 5 * 60 * 1000 // 5 minutes
+
 export interface ToolApprovalRequest {
 	agentId: string
 	conversationId: string
@@ -92,14 +97,31 @@ export class SdkInteractionCoordinator {
 		this.options.setTurnPhase?.("awaiting_approval", toolAskMessage.ts)
 		await this.options.postStateToWebview()
 
-		return new Promise<{ approved: boolean; reason?: string }>((resolve) => {
-			this.pendingToolApprovalResolve = resolve
-			this.pendingToolApprovalMessage = {
-				toolCallId: request.toolCallId,
-				messageTs: toolAskMessage.ts,
-				toolName: request.toolName,
-			}
-		})
+		// ===== Fix 2: Approval timeout =====
+		// If the user doesn't respond within APPROVAL_TIMEOUT_MS, auto-deny
+		// to prevent the agent loop from hanging forever.
+		return Promise.race([
+			new Promise<{ approved: boolean; reason?: string }>((resolve) => {
+				this.pendingToolApprovalResolve = resolve
+				this.pendingToolApprovalMessage = {
+					toolCallId: request.toolCallId,
+					messageTs: toolAskMessage.ts,
+					toolName: request.toolName,
+				}
+			}),
+			new Promise<{ approved: boolean; reason?: string }>((resolve) => {
+				setTimeout(() => {
+					Logger.warn(
+						`[SdkController] Tool approval timed out after ${APPROVAL_TIMEOUT_MS}ms for tool=${request.toolName}, auto-denying`,
+					)
+					if (this.pendingToolApprovalResolve === resolve as typeof this.pendingToolApprovalResolve) {
+						this.pendingToolApprovalResolve = undefined
+						this.pendingToolApprovalMessage = undefined
+					}
+					resolve({ approved: false, reason: "Approval timed out: no user response received" })
+				}, APPROVAL_TIMEOUT_MS)
+			}),
+		])
 	}
 
 	async handleAskQuestion(question: string, options: string[], _context: unknown): Promise<string> {
@@ -122,9 +144,25 @@ export class SdkInteractionCoordinator {
 		this.options.setTurnPhase?.("awaiting_followup", askMessage.ts)
 		await this.options.postStateToWebview()
 
-		return new Promise<string>((resolve) => {
-			this.pendingAskResolve = resolve
-		})
+		// ===== Fix 2: Ask question timeout =====
+		// If the user doesn't respond within APPROVAL_TIMEOUT_MS, resolve with
+		// an empty string to prevent the agent loop from hanging forever.
+		return Promise.race([
+			new Promise<string>((resolve) => {
+				this.pendingAskResolve = resolve
+			}),
+			new Promise<string>((resolve) => {
+				setTimeout(() => {
+					Logger.warn(
+						`[SdkController] Ask question timed out after ${APPROVAL_TIMEOUT_MS}ms, auto-continuing with empty response`,
+					)
+					if (this.pendingAskResolve === resolve as typeof this.pendingAskResolve) {
+						this.pendingAskResolve = undefined
+					}
+					resolve("")
+				}, APPROVAL_TIMEOUT_MS)
+			}),
+		])
 	}
 
 	resolvePendingToolApproval(
