@@ -1,9 +1,9 @@
 {
 	"name": "clinecode",
-	"displayName": "ClineCode",
+	"displayName": "clinecode",
 	"description": "Autonomous coding agent right in your IDE, capable of creating/editing files, running commands, using the browser, and more with your permission every step of the way.",
 	"version": "1.0.0",
-	"icon": "assets/icons/icon.png",
+	"icon": "assets/icons/robot_panel_light.png",
 	"engines": {
 		"vscode": "^1.84.0"
 	},
@@ -111,8 +111,8 @@
 			"activitybar": [
 				{
 					"id": "clinecode-ActivityBar",
-					"title": "Cline",
-					"icon": "assets/icons/icon.svg"
+					"title": "clinecode",
+					"icon": "assets/icons/robot_panel_light.png"
 				}
 			]
 		},
@@ -122,7 +122,7 @@
 					"type": "webview",
 					"id": "clinecode.SidebarProvider",
 					"name": "",
-					"icon": "assets/icons/icon.svg"
+					"icon": "assets/icons/robot_panel_light.png"
 				}
 			]
 		},
@@ -262,27 +262,27 @@
 				{
 					"command": "cline.plusButtonClicked",
 					"group": "navigation@1",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == clinecode.SidebarProvider"
 				},
 				{
 					"command": "cline.marketplaceButtonClicked",
 					"group": "navigation@2",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == clinecode.SidebarProvider"
 				},
 				{
 					"command": "cline.historyButtonClicked",
 					"group": "navigation@3",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == clinecode.SidebarProvider"
 				},
 				{
 					"command": "cline.accountButtonClicked",
 					"group": "navigation@5",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == clinecode.SidebarProvider"
 				},
 				{
 					"command": "cline.settingsButtonClicked",
 					"group": "navigation@6",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == clinecode.SidebarProvider"
 				}
 			],
 			"editor/context": [
@@ -342,7 +342,21 @@
 		},
 		"configuration": {
 			"title": "Cline",
-			"properties": {}
+			"properties": {
+				"cline.uiLanguage": {
+					"type": "string",
+					"scope": "window",
+					"default": "auto",
+					"enum": ["auto", "en", "zh-CN"],
+					"enumDescriptions": [
+						"Use VS Code's current UI language",
+						"English",
+						"中文"
+					],
+					"description": "Choose the UI language for Cline labels and settings.",
+					"order": 0
+				}
+			}
 		}
 	},
 	"scripts": {
