@@ -24,12 +24,14 @@ clinecode 是从 [Cline](https://github.com/cline/cline) 精简而来的 VS Code
 | **代码体积** | CLI + Kanban + VS Code + JetBrains + SDK 示例 + 评估工具 | **仅 VS Code 插件 + 核心 SDK 依赖** |
 | **安装方式** | npm / VS Marketplace / JetBrains | **VSIX 一键安装** |
 | **项目复杂度** | 多产品 monorepo，相互耦合 | **单一插件，结构清晰，易于定制** |
+| **终端稳定性** | Shell Integration 超时无保护、命令输出丢失、并发竞争 | **5 项专项修复：超时保护、死锁防护、竞态修复、可配回退、资源清理** |
 | **文档** | 面向所有产品线 | **专注 VS Code 使用场景** |
 | **学习门槛** | 需要理解 CLI/SDK/看板/企业版 | **只需关注插件开发** |
 
 ### 我们的优势
 
 - 🎯 **专注 VS Code**: 移除 CLI、看板、JetBrains、企业版等无关模块，只做最好的 VS Code 体验
+- 🖥️ **终端稳定运行**: 修复 Shell Integration 无限挂起、审批死锁、并发竞争、无回退方案、资源泄漏等 5 项终端问题，命令执行更可靠
 - 📦 **轻量高效**: 从 1153 个文件精简，保留核心功能，构建更快
 - 🔧 **易于定制**: 代码结构清晰，方便根据个人/团队需求深度定制
 - 📥 **安装简单**: 直接下载 `.vsix` 文件拖入 VS Code 即可，无需注册账号
