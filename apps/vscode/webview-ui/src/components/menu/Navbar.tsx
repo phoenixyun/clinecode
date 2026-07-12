@@ -5,17 +5,19 @@ import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { TaskServiceClient, UiServiceClient } from "@/services/grpc-client"
 import { useExtensionState } from "../../context/ExtensionStateContext"
+import { useTranslation } from "../../i18n/I18nContext"
 
 export const Navbar = () => {
 	const { navigateToHistory, navigateToSettings, navigateToAccount, navigateToMarketplace, navigateToChat } =
 		useExtensionState()
+	const { t } = useTranslation()
 
 	const SETTINGS_TABS = useMemo(
 		() => [
 			{
 				id: "chat",
-				name: "Chat",
-				tooltip: "New Task",
+				name: t("nav.newTask"),
+				tooltip: t("nav.newTask"),
 				icon: PlusIcon,
 				navigate: () => {
 					UiServiceClient.trackIntent(
@@ -34,29 +36,29 @@ export const Navbar = () => {
 			},
 			{
 				id: "customize",
-				name: "Customize",
-				tooltip: "Customize",
+				name: t("nav.customize"),
+				tooltip: t("nav.customize"),
 				icon: PuzzleIcon,
 				navigate: navigateToMarketplace,
 			},
 			{
 				id: "history",
-				name: "History",
-				tooltip: "History",
+				name: t("nav.history"),
+				tooltip: t("nav.history"),
 				icon: HistoryIcon,
 				navigate: navigateToHistory,
 			},
 			{
 				id: "account",
-				name: "Account",
-				tooltip: "Account",
+				name: t("nav.account"),
+				tooltip: t("nav.account"),
 				icon: UserCircleIcon,
 				navigate: navigateToAccount,
 			},
 			{
 				id: "settings",
-				name: "Settings",
-				tooltip: "Settings",
+				name: t("nav.settings"),
+				tooltip: t("nav.settings"),
 				icon: SettingsIcon,
 				navigate: navigateToSettings,
 			},

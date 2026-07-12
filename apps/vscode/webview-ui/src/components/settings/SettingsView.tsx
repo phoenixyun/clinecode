@@ -17,6 +17,7 @@ import { useEvent } from "react-use"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { type ClineUser, useClineAuth } from "@/context/ClineAuthContext"
 import { useExtensionState } from "@/context/ExtensionStateContext"
+import { useTranslation } from "@/i18n/I18nContext"
 import { cn } from "@/lib/utils"
 import { StateServiceClient } from "@/services/grpc-client"
 import { isAdminOrOwner } from "../account/helpers"
@@ -44,85 +45,73 @@ interface SettingsTab {
 	hidden?: (params?: { user: ClineUser | null; activeOrganization: UserOrganization | null }) => boolean
 }
 
-const SETTINGS_TABS: SettingsTab[] = [
-	{
-		id: "api-config",
-		name: "API Configuration",
-		tooltipText: "API Configuration",
-		headerText: "API Configuration",
-		icon: SlidersHorizontal,
-	},
-	{
-		id: "features",
-		name: "Features",
-		tooltipText: "Feature Settings",
-		headerText: "Feature Settings",
-		icon: CheckCheck,
-	},
-	{
-		id: "terminal",
-		name: "Terminal",
-		tooltipText: "Terminal Settings",
-		headerText: "Terminal Settings",
-		icon: SquareTerminal,
-	},
-	{
-		id: "general",
-		name: "General",
-		tooltipText: "General Settings",
-		headerText: "General Settings",
-		icon: Wrench,
-	},
-	{
-		id: "remote-config",
-		name: "Remote Config",
-		tooltipText: "Remotely configured fields",
-		headerText: "Remote Config",
-		icon: HardDriveDownload,
-		hidden: ({ activeOrganization } = { user: null, activeOrganization: null }) =>
-			!activeOrganization || !isAdminOrOwner(activeOrganization),
-	},
-	{
-		id: "about",
-		name: "About",
-		tooltipText: "About Cline",
-		headerText: "About",
-		icon: Info,
-	},
-	// Only show in dev mode
-	{
-		id: "debug",
-		name: "Debug",
-		tooltipText: "Debug Tools",
-		headerText: "Debug",
-		icon: FlaskConical,
-		hidden: ({ user } = { user: null, activeOrganization: null }) => !IS_DEV && !isClineInternalTester(user?.email || ""),
-	},
-]
-
 type SettingsViewProps = {
 	onDone: () => void
 	targetSection?: string
 }
 
-// Helper to render section header - moved outside component for better performance
-const renderSectionHeader = (tabId: string) => {
-	const tab = SETTINGS_TABS.find((t) => t.id === tabId)
-	if (!tab) {
-		return null
-	}
-
-	return (
-		<SectionHeader>
-			<div className="flex items-center gap-2">
-				<tab.icon className="w-4" />
-				<div>{tab.headerText}</div>
-			</div>
-		</SectionHeader>
-	)
-}
-
 const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
+	const { t } = useTranslation()
+
+	const SETTINGS_TABS: SettingsTab[] = useMemo(
+		() => [
+			{
+				id: "api-config",
+				name: t("settings.apiConfig"),
+				tooltipText: t("settings.apiConfig"),
+				headerText: t("settings.apiConfig"),
+				icon: SlidersHorizontal,
+			},
+			{
+				id: "features",
+				name: t("settings.features"),
+				tooltipText: t("settings.features"),
+				headerText: t("settings.features"),
+				icon: CheckCheck,
+			},
+			{
+				id: "terminal",
+				name: t("settings.terminal"),
+				tooltipText: t("settings.terminal"),
+				headerText: t("settings.terminal"),
+				icon: SquareTerminal,
+			},
+			{
+				id: "general",
+				name: t("settings.general"),
+				tooltipText: t("settings.general"),
+				headerText: t("settings.general"),
+				icon: Wrench,
+			},
+			{
+				id: "remote-config",
+				name: "Remote Config",
+				tooltipText: "Remotely configured fields",
+				headerText: "Remote Config",
+				icon: HardDriveDownload,
+				hidden: ({ activeOrganization } = { user: null, activeOrganization: null }) =>
+					!activeOrganization || !isAdminOrOwner(activeOrganization),
+			},
+			{
+				id: "about",
+				name: t("settings.about"),
+				tooltipText: "About clinecode",
+				headerText: t("settings.about"),
+				icon: Info,
+			},
+			{
+				id: "debug",
+				name: "Debug",
+				tooltipText: "Debug Tools",
+				headerText: "Debug",
+				icon: FlaskConical,
+				hidden: ({ user } = { user: null, activeOrganization: null }) =>
+					!IS_DEV && !isClineInternalTester(user?.email || ""),
+			},
+		],
+		[t],
+	)
+
 	// Memoize to avoid recreation
 	const TAB_CONTENT_MAP: Record<SettingsTabID, React.FC<any>> = useMemo(
 		() => ({
@@ -227,6 +216,23 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 		[activeTab],
 	)
 
+	// Helper to render section header
+	const renderSectionHeader = useCallback(
+		(tabId: string) => {
+			const tab = SETTINGS_TABS.find((t2) => t2.id === tabId)
+			if (!tab) return null
+			return (
+				<SectionHeader>
+					<div className="flex items-center gap-2">
+						<tab.icon className="w-4" />
+						<div>{tab.headerText}</div>
+					</div>
+				</SectionHeader>
+			)
+		},
+		[SETTINGS_TABS],
+	)
+
 	// Memoized active content component
 	const ActiveContent = useMemo(() => {
 		const Component = TAB_CONTENT_MAP[activeTab as keyof typeof TAB_CONTENT_MAP]
@@ -249,7 +255,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 
 	return (
 		<Tab>
-			<ViewHeader environment={environment} onDone={onDone} title="Settings" />
+			<ViewHeader environment={environment} onDone={onDone} title={t("settings.title")} />
 
 			<div className="flex flex-1 overflow-hidden">
 				<TabList

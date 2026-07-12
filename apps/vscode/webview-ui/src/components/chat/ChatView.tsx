@@ -10,6 +10,7 @@ import { useMount } from "react-use"
 import { useExtensionState } from "@/context/ExtensionStateContext"
 import { useShowNavbar } from "@/context/PlatformContext"
 import { useNormalizedApiConfiguration } from "@/hooks/useNormalizedApiConfiguration"
+import { useTranslation } from "@/i18n/I18nContext"
 import { FileServiceClient, UiServiceClient } from "@/services/grpc-client"
 import { Navbar } from "../menu/Navbar"
 import AutoApproveBar from "./auto-approve-menu/AutoApproveBar"
@@ -63,6 +64,7 @@ const sameUserMessage = (left: ClineMessage, right: ClineMessage) => {
 }
 
 const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryView }: ChatViewProps) => {
+	const { t } = useTranslation()
 	const showNavbar = useShowNavbar()
 	const {
 		version,
@@ -362,9 +364,9 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 	const scrollBehavior = useScrollBehavior(displayMessages, visibleMessages, groupedMessages, expandedRows, setExpandedRows)
 
 	const placeholderText = useMemo(() => {
-		const text = task ? "Type a message..." : "Type your task here..."
+		const text = task ? t("chat.placeholder") : t("chat.placeholder")
 		return text
-	}, [task])
+	}, [task, t])
 
 	return (
 		<ChatLayout isHidden={isHidden}>
