@@ -1,5 +1,37 @@
 # Changelog
 
+## [1.0.0] — VS Code 插件精简版
+
+> 从 Cline 项目 fork 而来，精简为纯 VS Code 插件（clinecode）。
+
+### Removed
+
+- **CLI**: 移除命令行工具 (`apps/cli`)，包括交互式终端、无头模式、CI/CD 集成等
+- **Kanban/看板**: 移除 Web 多代理任务看板 (`apps/cline-hub`, `.kanban`)
+- **Examples**: 移除所有示例项目 (`apps/examples`)
+- **Enterprise**: 移除企业版功能和相关文档 (`docs/enterprise-solutions`)
+- **SDK Examples**: 移除 SDK 示例代码 (`sdk/examples`)
+- **Evals**: 移除性能评估和基准测试 (`evals`)
+- **Codex/Greptile**: 移除代码索引和搜索工具配置 (`.codex`, `.greptile`)
+- **Assets**: 移除根级资源文件 (`assets/`)
+- **Docs**: 移除不相关文档 (`docs/cli`, `docs/kanban`, `docs/sdk`, `docs/api`, Mintlify 构建配置)
+
+### Changed
+
+- **package.json**: 精简 workspaces 为仅 SDK 包 + VS Code 插件；移除 CLI/Hub 相关脚本
+- **README.md**: 重写为 VS Code 插件专用说明，移除多产品介绍和 SDK/CLI 示例
+- **构建系统**: scripts 中所有 `@cline/cli`、`@cline/cline-hub` 引用替换为 `clinecode`
+
+### Kept
+
+- **VS Code 插件核心** (`apps/vscode`): 完整保留所有功能
+- **SDK 依赖库** (`sdk/packages`): agents, core, llms, sdk, shared
+- **插件文档** (`docs`): getting-started, core-workflows, customization, features, mcp, provider-config 等
+
+---
+
+> 以下为原始 Cline 项目历史记录（参考）：
+
 ## [4.0.0]
 
 ### Added
