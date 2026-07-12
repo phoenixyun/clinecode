@@ -181,6 +181,47 @@ export const translations = {
 		"rules.noRules": "No rules found",
 		"rules.addRule": "Add Rule",
 		"rules.manageRules": "Manage Rules",
+
+		// ===== FEATURE SETTINGS =====
+		// Agent
+		"features.agent": "Agent",
+		"features.autoCompact": "Auto Compact",
+		"features.autoCompactDesc": "Automatically compress conversation history.",
+		"features.autoCompactStrategy": "Auto Compact Strategy",
+		"features.autoCompactStrategyDesc": "Controls how auto compaction rewrites context.",
+		"features.basic": "Basic",
+		"features.agentic": "Agentic",
+		// Editor
+		"features.editor": "Editor",
+		"features.featureTips": "Feature Tips",
+		"features.featureTipsDesc": "Show rotating tips during the thinking phase to help you discover Cline features.",
+		"features.backgroundEdit": "Background Edit",
+		"features.backgroundEditDesc": "Allow edits without stealing editor focus",
+		"features.checkpoints": "Checkpoints",
+		"features.checkpointsDesc": "Save progress at key points for easy rollback",
+		"features.worktrees": "Worktrees",
+		"features.worktreesDesc": "Enables git worktree management for running parallel Cline tasks.",
+		// Experimental
+		"features.experimental": "Experimental",
+		"features.yoloMode": "Yolo Mode",
+		"features.yoloModeDesc":
+			"Execute tasks without user's confirmation. Auto-switches from Plan to Act mode and disables the ask question tool. Use with extreme caution.",
+		// Advanced
+		"features.advanced": "Advanced",
+		"features.hooks": "Hooks",
+		"features.hooksDesc": "Enable lifecycle and tool hooks during task execution.",
+		"features.mcpDisplayMode": "MCP Display Mode",
+		"features.mcpDisplayModeDesc": "Controls how MCP responses are displayed",
+		"features.plainText": "Plain Text",
+		"features.richDisplay": "Rich Display",
+		"features.markdown": "Markdown",
+		// General
+		"general.telemetry": "Allow error and usage reporting",
+		"general.telemetryDesc":
+			"Help improve Cline by sending usage data and error reports. No code, prompts, or personal information are ever sent.",
+		"general.telemetryOverview": "telemetry overview",
+		"general.privacyPolicy": "privacy policy",
+		"general.remoteLocked": "This setting is managed by your organization's remote configuration",
 	},
 
 	"zh-CN": {
@@ -349,6 +390,45 @@ export const translations = {
 		"rules.noRules": "未找到规则",
 		"rules.addRule": "添加规则",
 		"rules.manageRules": "管理规则",
+
+		// ===== 功能设置 =====
+		// Agent 代理
+		"features.agent": "代理",
+		"features.autoCompact": "自动压缩",
+		"features.autoCompactDesc": "自动压缩对话历史。",
+		"features.autoCompactStrategy": "自动压缩策略",
+		"features.autoCompactStrategyDesc": "控制自动压缩如何重写上下文。",
+		"features.basic": "基础",
+		"features.agentic": "智能",
+		// Editor 编辑器
+		"features.editor": "编辑器",
+		"features.featureTips": "功能提示",
+		"features.featureTipsDesc": "在思考阶段轮播提示，帮助你发现 Cline 的各项功能。",
+		"features.backgroundEdit": "后台编辑",
+		"features.backgroundEditDesc": "允许编辑操作不抢占编辑器焦点。",
+		"features.checkpoints": "检查点",
+		"features.checkpointsDesc": "在关键步骤保存进度，方便回滚。",
+		"features.worktrees": "工作树",
+		"features.worktreesDesc": "启用 Git 工作树管理，支持并行运行多个 Cline 任务。",
+		// Experimental 实验性
+		"features.experimental": "实验性",
+		"features.yoloMode": "Yolo 模式",
+		"features.yoloModeDesc": "无需用户确认即可执行任务。自动从计划模式切换到执行模式，并禁用询问工具。请谨慎使用。",
+		// Advanced 高级
+		"features.advanced": "高级",
+		"features.hooks": "钩子",
+		"features.hooksDesc": "在任务执行过程中启用生命周期和工具钩子。",
+		"features.mcpDisplayMode": "MCP 显示模式",
+		"features.mcpDisplayModeDesc": "控制 MCP 响应的显示方式。",
+		"features.plainText": "纯文本",
+		"features.richDisplay": "富文本显示",
+		"features.markdown": "Markdown",
+		// General 通用
+		"general.telemetry": "允许错误和使用情况报告",
+		"general.telemetryDesc": "发送使用数据和错误报告以帮助改进 Cline。绝不会发送代码、提示词或个人信息。",
+		"general.telemetryOverview": "遥测概览",
+		"general.privacyPolicy": "隐私政策",
+		"general.remoteLocked": "此设置由组织的远程配置管理",
 	},
 } as const
 
