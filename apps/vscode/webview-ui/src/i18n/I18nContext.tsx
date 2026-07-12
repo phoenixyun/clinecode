@@ -16,6 +16,7 @@ const I18nContext = createContext<I18nContextType | null>(null)
 export function I18nProvider({ children }: { children: React.ReactNode }) {
 	const { preferredLanguage } = useExtensionState()
 	const locale = preferredLanguageToLocale(preferredLanguage || "English")
+	console.log("[i18n] preferredLanguage:", preferredLanguage, "→ locale:", locale)
 
 	const value = useMemo<I18nContextType>(() => {
 		const en = translations.en

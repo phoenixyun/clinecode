@@ -53,64 +53,60 @@ type SettingsViewProps = {
 const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 	const { t } = useTranslation()
 
-	const SETTINGS_TABS: SettingsTab[] = useMemo(
-		() => [
-			{
-				id: "api-config",
-				name: t("settings.apiConfig"),
-				tooltipText: t("settings.apiConfig"),
-				headerText: t("settings.apiConfig"),
-				icon: SlidersHorizontal,
-			},
-			{
-				id: "features",
-				name: t("settings.features"),
-				tooltipText: t("settings.features"),
-				headerText: t("settings.features"),
-				icon: CheckCheck,
-			},
-			{
-				id: "terminal",
-				name: t("settings.terminal"),
-				tooltipText: t("settings.terminal"),
-				headerText: t("settings.terminal"),
-				icon: SquareTerminal,
-			},
-			{
-				id: "general",
-				name: t("settings.general"),
-				tooltipText: t("settings.general"),
-				headerText: t("settings.general"),
-				icon: Wrench,
-			},
-			{
-				id: "remote-config",
-				name: "Remote Config",
-				tooltipText: "Remotely configured fields",
-				headerText: "Remote Config",
-				icon: HardDriveDownload,
-				hidden: ({ activeOrganization } = { user: null, activeOrganization: null }) =>
-					!activeOrganization || !isAdminOrOwner(activeOrganization),
-			},
-			{
-				id: "about",
-				name: t("settings.about"),
-				tooltipText: "About clinecode",
-				headerText: t("settings.about"),
-				icon: Info,
-			},
-			{
-				id: "debug",
-				name: "Debug",
-				tooltipText: "Debug Tools",
-				headerText: "Debug",
-				icon: FlaskConical,
-				hidden: ({ user } = { user: null, activeOrganization: null }) =>
-					!IS_DEV && !isClineInternalTester(user?.email || ""),
-			},
-		],
-		[t],
-	)
+	const SETTINGS_TABS: SettingsTab[] = [
+		{
+			id: "api-config",
+			name: t("settings.apiConfig"),
+			tooltipText: t("settings.apiConfig"),
+			headerText: t("settings.apiConfig"),
+			icon: SlidersHorizontal,
+		},
+		{
+			id: "features",
+			name: t("settings.features"),
+			tooltipText: t("settings.features"),
+			headerText: t("settings.features"),
+			icon: CheckCheck,
+		},
+		{
+			id: "terminal",
+			name: t("settings.terminal"),
+			tooltipText: t("settings.terminal"),
+			headerText: t("settings.terminal"),
+			icon: SquareTerminal,
+		},
+		{
+			id: "general",
+			name: t("settings.general"),
+			tooltipText: t("settings.general"),
+			headerText: t("settings.general"),
+			icon: Wrench,
+		},
+		{
+			id: "remote-config",
+			name: "Remote Config",
+			tooltipText: "Remotely configured fields",
+			headerText: "Remote Config",
+			icon: HardDriveDownload,
+			hidden: ({ activeOrganization } = { user: null, activeOrganization: null }) =>
+				!activeOrganization || !isAdminOrOwner(activeOrganization),
+		},
+		{
+			id: "about",
+			name: t("settings.about"),
+			tooltipText: "About clinecode",
+			headerText: t("settings.about"),
+			icon: Info,
+		},
+		{
+			id: "debug",
+			name: "Debug",
+			tooltipText: "Debug Tools",
+			headerText: "Debug",
+			icon: FlaskConical,
+			hidden: ({ user } = { user: null, activeOrganization: null }) => !IS_DEV && !isClineInternalTester(user?.email || ""),
+		},
+	]
 
 	// Memoize to avoid recreation
 	const TAB_CONTENT_MAP: Record<SettingsTabID, React.FC<any>> = useMemo(
