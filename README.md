@@ -5,99 +5,115 @@
 <h1 align="center">clinecode</h1>
 
 <p align="center">
-AI 编码助手 — 直接在你的 VS Code 编辑器中运行。
+  <strong>基于 Cline 的 VS Code AI 编码插件 — 专注、高效、开箱即用</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/phoenixyun/clinecode/releases"><img src="https://img.shields.io/github/v/release/phoenixyun/clinecode?label=latest" alt="Release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue" alt="License"></a>
 </p>
 
 ---
 
-## VS Code 插件
+## 为什么选择 clinecode？
 
-clinecode 是一个 VS Code 插件，为你的编辑器提供自主 AI 编码代理能力。它可以创建和编辑文件、运行命令、浏览网页以及使用各种工具，每一步都需要你的许可。
+clinecode 是从 [Cline](https://github.com/cline/cline) 精简而来的 VS Code 插件版本，相比原项目做了以下优化：
 
-### 安装
+| | 原 Cline 项目 | clinecode |
+|------|------|------|
+| **代码体积** | CLI + Kanban + VS Code + JetBrains + SDK 示例 + 评估工具 | **仅 VS Code 插件 + 核心 SDK 依赖** |
+| **安装方式** | npm / VS Marketplace / JetBrains | **VSIX 一键安装** |
+| **项目复杂度** | 多产品 monorepo，相互耦合 | **单一插件，结构清晰，易于定制** |
+| **文档** | 面向所有产品线 | **专注 VS Code 使用场景** |
+| **学习门槛** | 需要理解 CLI/SDK/看板/企业版 | **只需关注插件开发** |
 
-从 VS Code 插件市场搜索 `clinecode` 安装，或手动编译 `.vsix` 文件：
+### 我们的优势
 
-```bash
-bun install
-bun run build
-```
+- 🎯 **专注 VS Code**: 移除 CLI、看板、JetBrains、企业版等无关模块，只做最好的 VS Code 体验
+- 📦 **轻量高效**: 从 1153 个文件精简，保留核心功能，构建更快
+- 🔧 **易于定制**: 代码结构清晰，方便根据个人/团队需求深度定制
+- 📥 **安装简单**: 直接下载 `.vsix` 文件拖入 VS Code 即可，无需注册账号
+- 🆓 **完全开源**: Apache 2.0 协议，无任何商业限制
 
 ---
 
-## 跨项目编辑代码
+## 安装
 
-Cline 会读取你的项目结构，理解文件之间的关系，并在整个代码库中进行协调的修改。它会实时监控 linter 和编译器错误，在问题影响到你之前修复缺失的导入、类型不匹配和语法错误。每次编辑都以 diff 形式展示，你可以审查、修改或撤销。
+从 [GitHub Releases](https://github.com/phoenixyun/clinecode/releases) 下载最新 `clinecode-*.vsix`，在 VS Code 中执行以下任一方式安装：
 
-## 执行终端命令
+- **拖拽安装**: 将 `.vsix` 文件拖入 VS Code 扩展面板
+- **命令安装**: `Extensions: Install from VSIX...` 选择文件
 
-Cline 直接在终端中执行命令并实时查看输出：安装包、运行构建脚本、执行测试、部署应用、管理数据库。对于 dev server 等长时间运行的进程，Cline 在后台继续工作并对新输出作出反应。
+---
 
-## Plan 模式与 Act 模式
+## 功能特性
 
-在 Plan 模式和 Act 模式之间切换。Plan 模式下，Cline 探索你的代码库、提出澄清性问题并制定策略。确认后切换到 Act 模式，Cline 开始执行计划。每个文件编辑和终端命令都需要你的批准。也可以开启自动批准来让 Cline 自主运行。
+### 跨项目编辑
 
-## 规则与技能
+理解项目结构，协调修改多文件。实时监控 linter/编译器错误，主动修复导入缺失、类型不匹配等问题。每次编辑以 diff 展示。
 
-在 `.clinerules` 文件中定义项目级别的规则来指导 Cline：编码标准、架构规范、部署流程、测试要求。规则会被自动识别。使用技能让模型在需要时加载特定的上下文。
+### 终端命令
 
-## 支持所有主流模型
+直接执行命令并实时查看输出 — 安装依赖、构建、测试、部署。长进程（dev server）在后台自动监控输出。
 
-Cline 不锁定某一家 AI 提供商，你可以选择适合你工作流的模型：
+### Plan / Act 模式
+
+Plan 模式探索代码库并制定策略，确认后切换 Act 模式执行，每步需批准（可开自动批准）。
+
+### 多模型支持
 
 | 提供商 | 模型 |
-|----------|--------|
-| Anthropic | Claude Opus, Sonnet, Haiku |
-| OpenAI | GPT 系列模型 |
-| Google | Gemini 系列模型 |
-| OpenRouter | 200+ 模型，来自任何提供商 |
-| Vercel AI Gateway | 通过一个网关路由到多个提供商 |
+|----------|------|
+| Anthropic | Claude Opus / Sonnet / Haiku |
+| OpenAI | GPT 系列 |
+| Google | Gemini 系列 |
+| OpenRouter | 200+ 模型 |
 | AWS Bedrock | Claude, Llama 等 |
-| Azure / GCP Vertex | 所有托管模型 |
-| Cerebras / Groq | 快速推理模型 |
-| Ollama / LM Studio | 在本地机器上运行模型 |
-| 任何 OpenAI 兼容 API | 自托管或第三方端点 |
+| Azure / GCP Vertex | 全部托管模型 |
+| Ollama / LM Studio | 本地模型 |
+| DeepSeek / Qwen / 豆包 | 国内模型 |
+| 兼容 API | 自托管或第三方端点 |
 
-## 通过 MCP 扩展
+### MCP 扩展
 
-使用 [MCP (Model Context Protocol)](https://github.com/modelcontextprotocol) 服务器连接数据库、查询 API、管理云基础设施以及与其他外部系统交互。使用社区构建的服务器或让 Cline 即时创建自定义工具。
+通过 [MCP](https://github.com/modelcontextprotocol) 连接数据库、API、云基础设施，社区服务器即装即用。
+
+### 检查点 & 规则
+
+- **检查点**: 自动保存工作区快照，随时对比 diff、一键回滚
+- **规则**: `.clinerules` 定义编码标准、架构规范，自动生效
+- **技能**: Skills 动态加载项目特定上下文
+
+---
 
 ## 项目结构
 
 ```
 clinecode/
-├── apps/vscode/          # VS Code 插件源码
-│   ├── src/              # 插件核心逻辑
-│   └── webview-ui/       # Webview UI (React/Vite)
-├── sdk/packages/         # 共享 SDK 库
+├── apps/vscode/          # VS Code 插件 (扩展入口)
+│   ├── src/              # 核心逻辑
+│   └── webview-ui/       # React/Vite UI
+├── sdk/packages/         # 共享库
 │   ├── agents/           # 代理框架
-│   ├── core/             # 核心功能
-│   ├── llms/             # 语言模型支持
-│   ├── shared/           # 共享工具
-│   └── sdk/              # SDK 基础
-└── docs/                 # 文档
+│   ├── core/             # 核心引擎
+│   ├── llms/             # 模型支持
+│   └── shared/           # 工具函数
+└── docs/                 # 使用文档
 ```
 
 ## 开发
 
 ```bash
-# 安装依赖
-bun install
-
-# 启动开发模式（watch 模式）
-bun run code
-
-# 编译
-bun run build
-
-# 运行测试
-bun run test
+bun install       # 安装依赖
+bun run code      # F5 调试 / watch 模式
+bun run build     # 生产编译
+bun run test      # 运行测试
 ```
 
 ## 参与贡献
 
-请从 [贡献指南](CONTRIBUTING.md) 开始。查看 [CHANGELOG.md](CHANGELOG.md) 了解最近更新。
+欢迎提交 Issue 和 PR！查看 [CHANGELOG.md](CHANGELOG.md) 了解更新历史。
 
 ## 许可证
 
-[Apache 2.0 © 2026](./LICENSE)
+[Apache 2.0](LICENSE)
