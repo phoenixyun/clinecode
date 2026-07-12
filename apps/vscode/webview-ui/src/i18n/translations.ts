@@ -222,6 +222,36 @@ export const translations = {
 		"general.telemetryOverview": "telemetry overview",
 		"general.privacyPolicy": "privacy policy",
 		"general.remoteLocked": "This setting is managed by your organization's remote configuration",
+
+		// ===== ABOUT =====
+		"about.title": "clinecode",
+		"about.description":
+			"A VS Code AI coding extension forked from Cline. Create/edit files, run terminal commands, browse the web — with your permission every step. Focused on VS Code experience with improved terminal stability.",
+		"about.community": "Community & Support",
+		"about.issues": "Issues",
+		"about.resources": "Resources",
+		"about.documentation": "Documentation",
+		"about.releases": "Releases",
+		"about.forkNote": "Forked from Cline, streamlined to a pure VS Code extension.",
+
+		// ===== TERMINAL SETTINGS =====
+		"terminal.defaultProfile": "Default Terminal Profile",
+		"terminal.defaultProfileDesc": "Select the default terminal Cline will use. 'Default' uses your VSCode global setting.",
+		"terminal.shellTimeout": "Shell integration timeout (seconds)",
+		"terminal.shellTimeoutDesc":
+			"Set how long Cline waits for shell integration to activate before executing commands. Increase this value if you experience terminal connection timeouts.",
+		"terminal.shellTimeoutPlaceholder": "Enter timeout in seconds",
+		"terminal.shellTimeoutError": "Please enter a positive number",
+		"terminal.aggressiveReuse": "Enable aggressive terminal reuse",
+		"terminal.aggressiveReuseDesc":
+			"When enabled, Cline will reuse existing terminal windows that aren't in the current working directory. Disable this if you experience issues with task lockout after a terminal command.",
+		"terminal.executionMode": "Terminal Execution Mode",
+		"terminal.executionModeDesc": "Choose whether Cline runs commands in the VS Code terminal or a background process.",
+		"terminal.vscodeTerminal": "VS Code Terminal",
+		"terminal.backgroundExec": "Background Exec",
+		"terminal.troubleshooting": "Having terminal issues?",
+		"terminal.quickFixes": "Terminal Quick Fixes",
+		"terminal.completeGuide": "Complete Troubleshooting Guide",
 	},
 
 	"zh-CN": {
@@ -429,6 +459,35 @@ export const translations = {
 		"general.telemetryOverview": "遥测概览",
 		"general.privacyPolicy": "隐私政策",
 		"general.remoteLocked": "此设置由组织的远程配置管理",
+
+		// ===== 关于 =====
+		"about.title": "clinecode",
+		"about.description":
+			"基于 Cline 的 VS Code AI 编码插件。可创建和编辑文件、执行终端命令、浏览网页，每一步都需你的许可。专注 VS Code 体验，优化终端稳定性。",
+		"about.community": "社区 & 支持",
+		"about.issues": "问题反馈",
+		"about.resources": "资源",
+		"about.documentation": "文档",
+		"about.releases": "版本发布",
+		"about.forkNote": "从 Cline 项目 fork 而来，精简为纯 VS Code 插件。",
+
+		// ===== 终端设置 =====
+		"terminal.defaultProfile": "默认终端配置",
+		"terminal.defaultProfileDesc": "选择 Cline 使用的默认终端。'Default' 使用 VS Code 的全局设置。",
+		"terminal.shellTimeout": "Shell 集成超时（秒）",
+		"terminal.shellTimeoutDesc": "设置 Cline 在执行命令前等待 Shell 集成激活的时间。如果遇到终端连接超时，请增大此值。",
+		"terminal.shellTimeoutPlaceholder": "输入超时秒数",
+		"terminal.shellTimeoutError": "请输入一个正数",
+		"terminal.aggressiveReuse": "启用激进终端复用",
+		"terminal.aggressiveReuseDesc":
+			"启用后，Cline 将复用不在当前工作目录中的现有终端窗口。如果终端命令后出现任务锁定问题，请禁用此选项。",
+		"terminal.executionMode": "终端执行模式",
+		"terminal.executionModeDesc": "选择 Cline 在 VS Code 终端中运行命令还是使用后台进程。",
+		"terminal.vscodeTerminal": "VS Code 终端",
+		"terminal.backgroundExec": "后台执行",
+		"terminal.troubleshooting": "终端有问题？",
+		"terminal.quickFixes": "终端快速修复",
+		"terminal.completeGuide": "完整故障排除指南",
 	},
 } as const
 
